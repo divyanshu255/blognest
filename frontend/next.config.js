@@ -13,7 +13,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true, // ⬅️ Add this line to ignore ESLint errors during build
   },
-  swcMinify: true,
+  
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { Heart, Eye, MessageCircle, Share2, Twitter } from 'lucide-react';
+import { Heart, Eye, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
@@ -29,7 +29,9 @@ export default function BlogPost() {
 
   const fetchPost = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/posts/${params.slug}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/posts/${params.slug}`
+      );
       if (response.ok) {
         const data = await response.json();
         setPost(data.post);
@@ -54,13 +56,16 @@ export default function BlogPost() {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/posts/${post!._id}/like`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer dev_token',
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/posts/${post!._id}/like`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer dev_token',
+          },
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -82,10 +87,10 @@ export default function BlogPost() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
-      month: 'long', 
-      day: 'numeric' 
+      month: 'long',
+      day: 'numeric',
     });
   };
 
@@ -126,7 +131,7 @@ export default function BlogPost() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Featured Image */}
         {post.featuredImage && (
@@ -172,4 +177,37 @@ export default function BlogPost() {
               onClick={handleLike}
               className={`flex items-center space-x-2 text-sm transition-colors ${
                 isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
-              }`
+              }`}
+            >
+              <Heart className="w-5 h-5" />
+              <span>{likeCount}</span>
+            </button>
+
+            <div className="flex items-center space-x-2 text-sm text-gray-500">
+              <Eye className="w-5 h-5" />
+              <span>{post.views}</span>
+            </div>
+
+            <div className="flex items-center space-x-2 text-sm text-gray-500">
+              <MessageCircle className="w-5 h-5" />
+              <span>{commentCount}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Post Content */}
+        <div
+          className="prose max-w-none mb-10"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
+
+        {/* Comments */}
+        <Comments
+          postId={post._id}
+          user={user}
+          onCommentCountChange={handleCommentCountChange}
+        />
+      </main>
+    </div>
+  );
+}

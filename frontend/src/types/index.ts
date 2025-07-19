@@ -1,3 +1,5 @@
+// types.ts
+
 export interface User {
   _id: string;
   clerkId: string;
@@ -43,4 +45,17 @@ export interface Post {
   isLiked?: boolean;
   viewCount?: number;
   commentCount?: number;
-} 
+}
+
+// ✅ Add this to support the Comments.tsx page
+export interface Comment {
+  _id: string;
+  postId: string;
+  message: string;
+  createdAt: string;
+  user: {
+    _id: string;
+    username: string;
+    profileImage?: string;
+  };
+}

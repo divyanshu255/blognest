@@ -183,10 +183,7 @@ export default function BlogPost() {
               <span>{likeCount}</span>
             </button>
 
-            <div className="flex items-center space-x-2 text-sm text-gray-500">
-              <Eye className="w-5 h-5" />
-              <span>{post.views}</span>
-            </div>
+            
 
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               <MessageCircle className="w-5 h-5" />
